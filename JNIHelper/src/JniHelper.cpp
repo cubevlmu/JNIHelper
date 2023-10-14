@@ -1,7 +1,8 @@
 #include "_JniHelper.hpp"
-#include "jni.h"
 #include "JniHelper.hpp"
+#include "_JniCallbackHelper.hpp"
 
+#include <jni.h>
 
 namespace tool {
 
@@ -10,16 +11,28 @@ JNIEnv *myGlobalJNIEnv = nullptr;
 }
 namespace jni {
 
-    lib_api Helper createHelper() {
-        auto* helper = new JniHelper();
+    static void handleErrToJavaStack(const char* msg, bool value) {
+
+    }
+
+    Helper createHelper() {
+        static auto* helper = new JniHelper();
         helper->env = tool::myGlobalJNIEnv;
+        helper->error = [](const char* msg, bool a) {
+            std::cerr << "JNIHelper Error : " << msg << "\n";
+        };
+        helper->msg = [](const char* msg, MessageLevel lv) {
+            if(lv == MessageLevel::DebugMsg) {
+                std::cout << "JNIHelper Debug : " << msg << "\n";
+            } else {
+                std::cerr << "JNIHelper Warning : " << msg << "\n";
+            }
+        };
         return helper;
     }
 
-    lib_api void BindCallback(Helper helper, JNIHelperErrorFunc func) {
-        if(func != nullptr) {
-            helper->error = func;
-        }
+    void BindCallback(Helper helper, JNIHelperErrorFunc func) {
+        helper->error = func;
     }
     
 } // namespace jni

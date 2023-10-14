@@ -36,12 +36,12 @@ namespace jni {
         invoke->result = new Param(); invoke->result->type = returnType;
 
 #ifdef HelperDebug
-        std::cout << "Invode Info : \n" 
-                  << "Params : " << invoke->params << "\n"
-                  << "Invoke : " << invoke->invoke << "\n"
-                  << "Name   : " << invoke->name   << "\n"
-                  << "MId    : " << invoke->mid    << "\n"
-                  << "Result : " << invoke->result->type << "\n";   
+        std::cout << "Invode Info : \n"
+            << "Params : " << invoke->params << "\n"
+            << "Invoke : " << invoke->invoke << "\n"
+            << "Name   : " << invoke->name << "\n"
+            << "MId    : " << invoke->mid << "\n"
+            << "Result : " << invoke->result->type << "\n";
 #endif
 
         return invoke;
@@ -86,8 +86,28 @@ namespace jni {
         return value;
     }
 
+    void* CreateRuntimeException(Helper helper, const char* msg)
+    {
+        auto* env = helper->env;
+
+        jclass runtimeExceptionClass = env->FindClass("java/lang/RuntimeException");
+
+        if (runtimeExceptionClass != nullptr) {
+            jmethodID ctor = env->GetMethodID(runtimeExceptionClass, "<init>", "(Ljava/lang/String;)V");
+            jstring message = env->NewStringUTF(msg);
+            jobject exceptionObj = env->NewObject(runtimeExceptionClass, ctor, message);
+
+            return exceptionObj;
+        }
+        else {
+            std::cerr << "RuntimeException class not found" << std::endl;
+        }
+
+        return nullptr;
+    }
+
     lib_api void DestroyInvoke(Helper helper, JavaMethod mtd) {
-        
+
     }
 
     lib_api Param* GetReturnValue(JavaMethod method) {
@@ -118,7 +138,7 @@ namespace jni {
 
 
     lib_api JavaObject CreateByJObj(Helper helper, const Param& param) {
-        if(param.type != JavaType::JavaObjects) {
+        if (param.type != JavaType::JavaObjects) {
             helper->error("param's type is not JavaObject", false);
             return nullptr;
         }
@@ -137,7 +157,7 @@ namespace jni {
 
         auto* ivk = new ObjectInvoke();
         ivk->_class = clazz;
-        ivk->_instance = nullptr;
+        ivk->_instance = jobj;
         ivk->name = "";
         return ivk;
     }

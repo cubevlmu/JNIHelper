@@ -34,4 +34,5 @@ target_include_directories(JNIHelper PRIVATE
 
 target_compile_definitions(JNIHelper PRIVATE 
     compile_lib
+    #HelperDebug
 )

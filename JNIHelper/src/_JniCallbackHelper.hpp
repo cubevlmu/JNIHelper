@@ -21,4 +21,5 @@ namespace jni {
     };
 
     jvalue ParseToJValue(const Param& p);
+    void* CreateRuntimeException(Helper helper, const char* msg);
 }

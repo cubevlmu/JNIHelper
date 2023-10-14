@@ -14,8 +14,8 @@ extern "C" {
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_Test_load
-  (JNIEnv *, jclass) {
-    test();
+  (JNIEnv *, jclass, jobject instance) {
+    test1(instance);
   }
 
 #ifdef __cplusplus

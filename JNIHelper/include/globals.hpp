@@ -51,3 +51,4 @@
    }
 
 void test();
+void test1(void* instance);
