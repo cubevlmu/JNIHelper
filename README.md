@@ -63,16 +63,14 @@
             <li><a href="#licence">Licence</a></li>
         </ul>
     </li>
-<!--
     <li>
         <a href="#getting-started">Getting Started</a>
         <ul>
-            <li><a href="#modify">Modify</a></li>
-            <li><a href="#client-install">Client Install</a></li>
-            <li><a href="#server-install">Server Install</a></li>
-            <li><a href="#mod-dev">Mod Development</a></li>
+            <li><a href="#buildprj">Build JNIHelper</a></li>
+            <li><a href="#usehelper">Use JNIHelper</a></li>
         </ul>
     </li>
+<!--
     <li><a href="#future-plan">Future Plan</a>
         <ul>
             <li><a href="#our-willing">Our Willing</a></li>
@@ -139,84 +137,29 @@ SOFTWARE.
 
 <hr/>
 
-<!--
+
 <div id="getting-started"></div>
 
 ## Getting Started
 
-<div id="modify"></div>
+<div id="buildprj"></div>
 
-#### Modify
+#### Build JNIHelper
 
-1. Directly fork project
-2. import the file into your IDE as a gradle project.
-3. Make sure that the java version is 17 or above
-4. Start modifying yourself
+0. Fork The Project To Your Comnputer
+1. Download MacOS/Linux/Windows's JDK Pack. Copy The Include Dirs To Project Root Dir. Rename It To 'JNI'
+2. Modify The Root CMakeLists.txt To Your Platform.
+3. Run 'cmake build' command in build dir
+4. Run your platform c++ compiler's compile command
 
-<div id="client-install"></div>
+<div id="usehelper"></div>
 
-#### Client Install
+#### Use JNIHelper
 
-1. Download the client jar file(coming soon)
-2. put it anywhere (Notice: this folder will be automatically identified as the game
-   folder)
-3. Write a random cmd script, such as "java -jar"
-4. Start the game, have fun
-
-<div id="server-install"></div>
-
-#### Server Install
-
-1. Download the server jar file and
-2. put it anywhere (note: this folder will be automatically identified as the game
-   folder)
-3. Write a random cmd script, such as java jar
-4. Start the server. The default port is 11451
-
-<div id="mod-dev"></div>
-
-#### Mod development
-
-1. Use the Module "Core","Client" and "server" as project references
-2. start mod developing(the "Default" module could be an example)
-3. See docs for more information(coming soon)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<hr/>
-
-<div id="future plan"></div>
-
-## Future Plan
-
-<div id="our-willing"></div>
-
-### Our Willing
-
-- Making it runs in multiple render API
-- having a fully data compatible with Minecraft
-- having a network protcol compat with Minecraft
-
-<div id="roadmap"></div>
-
-### Roadmap
-
-- [ ] Add network system
-- [ ] Complete the mod API
-- [ ] Add scripting System
-- [ ] Complete Minecraft data compat layer
-- [ ] Multi-language Support
-    - [x] Chinese
-    - [x] English
-    - [ ] Japanese
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<hr/>
-
-<div id="more-info"></div>
-
--->
+0. Create A Dynamic Lib Project
+1. Include The 'include' dir to your project
+2. Link The JNIHelper's lib to your project. (We Recommand Linking By Static Lib)
+3. Enjoy The Time Playing With JNI :)
 
 ## More Information
 
