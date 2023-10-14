@@ -16,11 +16,7 @@ def build():
         return
 
     try:
-        if platform.system() == "Windows":
-            subprocess.run([shutil.which("vcvarsall.bat"), "&&", cmake_path, "-DCMAKE_BUILD_TYPE=Release", "-DBUILDLIB=ON", ".."], check=True, shell=True)
-        else:
-            subprocess.run([cmake_path, "-DCMAKE_BUILD_TYPE=Release", "-DBUILDLIB=ON", ".."], check=True)
-        
+        subprocess.run([cmake_path, "-DCMAKE_BUILD_TYPE=Release", "-DBUILDLIB=ON", ".."], check=True)
         subprocess.run(["cmake", "--build", "."], check=True)
         print("Build completed successfully.")
     except subprocess.CalledProcessError as e:

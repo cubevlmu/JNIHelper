@@ -16,4 +16,5 @@ namespace jni {
 
     lib_api Helper createHelper();
     lib_api void BindCallback(Helper helper, JNIHelperErrorFunc func);
+    lib_api void DestroyHelper(Helper helper);
 }

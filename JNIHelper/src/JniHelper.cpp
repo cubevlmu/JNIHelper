@@ -34,6 +34,12 @@ namespace jni {
     void BindCallback(Helper helper, JNIHelperErrorFunc func) {
         helper->error = func;
     }
+
+    void DestroyHelper(Helper helper)
+    {
+        helper->msg("On Helper Destroyed", DebugMsg);
+        delete helper;
+    }
     
 } // namespace jni
 

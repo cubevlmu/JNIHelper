@@ -19,4 +19,5 @@ ELSE()
 ENDIF()
 
 add_subdirectory("JNIHelper")
-add_subdirectory("JNITest")
+
+set(HelperIncludeDir ${CMAKE_CURRENT_SOURCE_DIR}/JNIHelper/include CACHE INTERNAL "Include Dir")
