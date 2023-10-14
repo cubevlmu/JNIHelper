@@ -146,11 +146,10 @@ SOFTWARE.
 
 #### Build JNIHelper
 
-0. Fork The Project To Your Comnputer
-1. Download MacOS/Linux/Windows's JDK Pack. Copy The Include Dirs To Project Root Dir. Rename It To 'JNI'
-2. Modify The Root CMakeLists.txt To Your Platform.
-3. Run 'cmake build' command in build dir
-4. Run your platform c++ compiler's compile command
+1. Clone The Project To Your Computer
+2. Check That If You Installed Python3
+3. Run Command 'python3 scripts/Build.py'
+4. Files Will Be Output To 'build' Dir
 
 <div id="usehelper"></div>
 

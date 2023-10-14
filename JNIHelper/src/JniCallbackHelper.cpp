@@ -8,12 +8,12 @@
 
 namespace jni {
 
-    lib_api bool Invoke(Helper helper, JavaMethod method) {
+    bool Invoke(Helper helper, JavaMethod method) {
         callMethod(helper, method);
         return true;
     }
 
-    lib_api JavaMethod CreateInvoke(Helper helper, JavaObject clazz, JavaType returnType, const char* name, const char* signature, std::initializer_list<Param> params) {
+    JavaMethod CreateInvoke(Helper helper, JavaObject clazz, JavaType returnType, const char* name, const char* signature, std::initializer_list<Param> params) {
         auto* env = helper->env;
 
         jvalue* values = new jvalue[params.size()]();
@@ -33,6 +33,7 @@ namespace jni {
         invoke->invoke = clazz;
         invoke->name = clazz->name;
         invoke->mid = mid;
+        invoke->parmsCount = params.size();
         invoke->result = new Param(); invoke->result->type = returnType;
 
 #ifdef HelperDebug
@@ -47,7 +48,7 @@ namespace jni {
         return invoke;
     }
 
-    jvalue jni::ParseToJValue(const Param& p)
+    jvalue ParseToJValue(const Param& p)
     {
         jvalue value;
         switch (p.type)
@@ -106,15 +107,25 @@ namespace jni {
         return nullptr;
     }
 
-    lib_api void DestroyInvoke(Helper helper, JavaMethod mtd) {
+    void DestroyInvoke(Helper helper, JavaMethod mtd) {
+        auto* env = helper->env;
 
+        delete[] mtd->params;
+        delete mtd->result;
+
+        auto* ink = mtd->invoke;
+
+        env->DeleteLocalRef(ink->_class);
+        env->DeleteLocalRef(ink->_instance);
+
+        delete mtd;
     }
 
-    lib_api Param* GetReturnValue(JavaMethod method) {
+    Param* GetReturnValue(JavaMethod method) {
         return method->result;
     }
 
-    lib_api JavaObject FindStaticClass(Helper helper, const char* name) {
+    JavaObject FindStaticClass(Helper helper, const char* name) {
         auto* env = helper->env;
         jclass clazz = env->FindClass(name);
         if (clazz == nullptr) {
@@ -137,7 +148,7 @@ namespace jni {
     }
 
 
-    lib_api JavaObject CreateByJObj(Helper helper, const Param& param) {
+    JavaObject CreateByJObj(Helper helper, const Param& param) {
         if (param.type != JavaType::JavaObjects) {
             helper->error("param's type is not JavaObject", false);
             return nullptr;
@@ -162,7 +173,7 @@ namespace jni {
         return ivk;
     }
 
-    lib_api void* CreateBooleanObject(Helper helper, const Param& param) {
+    void* CreateBooleanObject(Helper helper, const Param& param) {
         auto env = helper->env;
 
         jclass booleanClass = env->FindClass("java/lang/Boolean");
@@ -173,7 +184,7 @@ namespace jni {
         return booleanObject;
     }
 
-    lib_api void* CreateIntObject(Helper helper, const Param& param) {
+    void* CreateIntObject(Helper helper, const Param& param) {
         auto env = helper->env;
 
         jclass integerClass = env->FindClass("java/lang/Integer");
@@ -182,7 +193,7 @@ namespace jni {
         return integerObject;
     }
 
-    lib_api void* CreateLongObject(Helper helper, const Param& param) {
+    void* CreateLongObject(Helper helper, const Param& param) {
         auto env = helper->env;
 
         jclass longClass = env->FindClass("java/lang/Long");
@@ -193,7 +204,7 @@ namespace jni {
     }
 
 
-    lib_api void* CreateFloatObject(Helper helper, const Param& param) {
+    void* CreateFloatObject(Helper helper, const Param& param) {
         auto env = helper->env;
         jclass floatClass = env->FindClass("java/lang/Float");
         jmethodID floatConstructor = env->GetMethodID(floatClass, "<init>", "(F)V");
@@ -201,7 +212,7 @@ namespace jni {
         return floatObject;
     }
 
-    lib_api void* CreateDoubleObject(Helper helper, const Param& param) {
+    void* CreateDoubleObject(Helper helper, const Param& param) {
         auto env = helper->env;
 
         jclass doubleClass = env->FindClass("java/lang/Double");
@@ -210,7 +221,7 @@ namespace jni {
         return doubleObject;
     }
 
-    lib_api void* CreateCharObject(Helper helper, const Param& param) {
+    void* CreateCharObject(Helper helper, const Param& param) {
         auto env = helper->env;
         jclass characterClass = env->FindClass("java/lang/Character");
         jmethodID valueOfMethod = env->GetStaticMethodID(characterClass, "valueOf", "(C)Ljava/lang/Character");
@@ -219,7 +230,7 @@ namespace jni {
         return characterObject;
     }
 
-    lib_api void* CreateByteObject(Helper helper, const Param& param) {
+    void* CreateByteObject(Helper helper, const Param& param) {
         auto env = helper->env;
         jclass byteClass = env->FindClass("java/lang/Byte");
         jmethodID byteConstructor = env->GetMethodID(byteClass, "<init>", "(B)V");
@@ -227,10 +238,23 @@ namespace jni {
         return byteObject;
     }
 
-    lib_api void* CreateStringObject(Helper helper, const Param& param) {
+    void* CreateStringObject(Helper helper, const Param& param) {
         auto env = helper->env;
         jstring stringObject = env->NewStringUTF(param.value.s);
         return stringObject;
+    }
+
+    void DeleteObjectRef(Helper helper, void* p)
+    {
+        jobject obj = (jobject) p;
+        if(obj == nullptr) {
+            helper->msg("DeleteObjectRef - Nullptr Object", WarnMsg);
+            return;
+        }
+
+        auto* env = helper->env;
+        env->DeleteLocalRef(obj);
+        delete obj;
     }
 
 } // namespace jni

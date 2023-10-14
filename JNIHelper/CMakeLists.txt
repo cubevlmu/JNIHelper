@@ -4,13 +4,23 @@ project(JNIHelper LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
-add_library(JNIHelper SHARED 
-    "src/globals.cpp"
-    "src/JniCallbackHelper.cpp"
-    "src/JniHelper.cpp"
-    "src/_JNICaller.cpp"
-    "src/JniFields.cpp"
+set(src  
+"src/globals.cpp"
+"src/JniCallbackHelper.cpp"
+"src/JniHelper.cpp"
+"src/_JNICaller.cpp"
+"src/JniFields.cpp"
 )
+
+IF(${BUILDLIB})
+add_library(JNIHelper STATIC 
+    ${src}
+)
+ELSE()
+add_library(JNIHelper SHARED 
+    ${src}
+)
+ENDIF()
 
 ## =======================
 ## Init JNI System Path

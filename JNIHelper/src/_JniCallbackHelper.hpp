@@ -18,6 +18,7 @@ namespace jni {
         const char* name;
         jmethodID mid;
         Param* result;
+        int parmsCount;
     };
 
     jvalue ParseToJValue(const Param& p);

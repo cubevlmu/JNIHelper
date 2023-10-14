@@ -27,4 +27,6 @@ namespace jni {
     lib_api void* CreateCharObject(Helper helper, const Param& param);
     lib_api void* CreateByteObject(Helper helper, const Param& param);
     lib_api void* CreateStringObject(Helper helper, const Param& param);
+
+    lib_api void DeleteObjectRef(Helper helper, void* p);
 }

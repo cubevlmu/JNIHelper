@@ -19,6 +19,8 @@ void test() {
     jni::Invoke(ins, mtd);
     jni::Param* p = jni::GetReturnValue(mtd);
     printf("Result From Java Method %i\n", p->value.i);
+
+    jni::DestroyInvoke(ins, mtd);
 }
 
 void test1(void* instance) {
